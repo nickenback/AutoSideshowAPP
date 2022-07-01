@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
             if (imagelistArray.size > 0) {
                 if (tTimer == null) {
                     startstop.text = "停止"
+                    
                     tTimer = Timer()
                     tTimer!!.schedule(object : TimerTask() {
                         override fun run() {
@@ -64,7 +65,6 @@ class MainActivity : AppCompatActivity() {
 
                 } else {
                     startstop.text = "開始"
-
 
                     tTimer!!.cancel()
                     tTimer = null
