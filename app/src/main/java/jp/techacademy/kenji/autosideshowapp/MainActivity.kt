@@ -14,7 +14,8 @@ import androidx.core.net.toUri
 import android.os.Handler
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity() : AppCompatActivity() {
 
     private val PERMISSIONS_REQUEST_CODE = 100
 
@@ -22,16 +23,16 @@ class MainActivity : AppCompatActivity() {
 
     private var thandler = Handler()
 
-
+    public var imagelistArray: ArrayList<String> = arrayListOf()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        var i:Int = 0
-        var imagelistArray = arrayListOf<String>()
+//        var imagelistArray = arrayListOf<String>()
 
+        var i:Int = 0
 
 
 
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
                 imagelistArray = getContentsInfo()
             } else {
                 requestPermissions(arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), PERMISSIONS_REQUEST_CODE)
+
             }
         } else {
             imagelistArray = getContentsInfo()
@@ -87,21 +89,20 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        var imagelistArray = arrayListOf<String>()
+//        var imagelistArray: ArrayList<String>
         when (requestCode) {
             PERMISSIONS_REQUEST_CODE ->
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     imagelistArray = getContentsInfo()
                 }
         }
+
     }
 
-    private fun getContentsInfo():ArrayList<String> {
+    public fun getContentsInfo():ArrayList<String> {
         val resolver = contentResolver
         val cursor = resolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -111,7 +112,7 @@ class MainActivity : AppCompatActivity() {
             null
         )
 
-        var imagelistArray = arrayListOf<String>()
+//        var imagelistArray = arrayListOf<String>()
 
         if (cursor!!.moveToFirst()) {
             do {
