@@ -9,7 +9,7 @@ import android.os.Build
 import android.provider.MediaStore
 import android.content.ContentUris
 import kotlinx.android.synthetic.main.activity_main.*
-import androidx.core.net.toUri
+import android.net.Uri
 
 import android.os.Handler
 import java.util.*
@@ -23,7 +23,11 @@ class MainActivity() : AppCompatActivity() {
 
     private var thandler = Handler()
 
-    public var imagelistArray: ArrayList<String> = arrayListOf()
+    public var imagelistArray: ArrayList<Uri> = arrayListOf()
+
+    public var i:Int = 0
+
+    public var im:Int = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,7 +36,7 @@ class MainActivity() : AppCompatActivity() {
 
 //        var imagelistArray = arrayListOf<String>()
 
-        var i:Int = 0
+//        var i:Int = 0
 
 
 
@@ -47,7 +51,7 @@ class MainActivity() : AppCompatActivity() {
             imagelistArray = getContentsInfo()
         }
 
-        var im:Int = imagelistArray.size - 1
+//        im = imagelistArray.size - 1
 
 
         startstop.setOnClickListener {
@@ -60,7 +64,7 @@ class MainActivity() : AppCompatActivity() {
                         override fun run() {
                             thandler.post {
                                 i = countup(i, im)
-                                imageView.setImageURI(imagelistArray[i].toUri())
+                                imageView.setImageURI(imagelistArray[i])
                             }
                         }
                     }, 2000, 2000)
@@ -78,14 +82,14 @@ class MainActivity() : AppCompatActivity() {
         next.setOnClickListener {
             if(tTimer == null && imagelistArray.size > 0) {
                 i = countup(i, im)
-                imageView.setImageURI(imagelistArray[i].toUri())
+                imageView.setImageURI(imagelistArray[i])
             }
         }
 
         prev.setOnClickListener {
             if(tTimer == null && imagelistArray.size > 0) {
                 i = countdown(i, im)
-                imageView.setImageURI(imagelistArray[i].toUri())
+                imageView.setImageURI(imagelistArray[i])
             }
         }
 
@@ -102,7 +106,7 @@ class MainActivity() : AppCompatActivity() {
 
     }
 
-    public fun getContentsInfo():ArrayList<String> {
+    public fun getContentsInfo():ArrayList<Uri> {
         val resolver = contentResolver
         val cursor = resolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -120,12 +124,13 @@ class MainActivity() : AppCompatActivity() {
                 val id = cursor.getLong(fieldIndex)
                 val imageUri = ContentUris.withAppendedId(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id)
 
-                imagelistArray.add(imageUri.toString())
+                imagelistArray.add(imageUri)
 
             } while (cursor.moveToNext())
         }
+        im = imagelistArray.size - 1
         if(imagelistArray.size > 1) {
-            imageView.setImageURI(imagelistArray[0].toUri())
+            imageView.setImageURI(imagelistArray[0])
         }
 
         cursor.close()
